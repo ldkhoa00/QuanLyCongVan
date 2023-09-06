@@ -1,0 +1,4 @@
+mongodb 1.39.1
+nodejs: v16.14.0
+
+lệnh chạy backend: npm run devStart
