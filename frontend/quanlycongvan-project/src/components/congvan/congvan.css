@@ -1,0 +1,21 @@
+.filter-field {
+    position: relative;
+    width: 100%;
+}
+
+.section-container {
+    padding: 16px;
+    outline: 1px solid black;
+    border-radius: 5px;
+}
+/* 
+.filter-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+} */
+

@@ -1,0 +1,27 @@
+.button-lg {
+    width: fit-content;
+    height: fit-content;
+}
+
+.app-bar {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.add-button {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-bar {
+    flex: 1;
+}
+
+.space-width {
+    width: 8px;
+}
+
+.space-height {
+    height: 8px
+}
