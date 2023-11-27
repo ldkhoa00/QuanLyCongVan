@@ -9,14 +9,14 @@ import { useUpdatePhongBan } from '../../../api/PhongBan/usePhongBan';
 const QLCapNhatPhongBan = ({ phongbanData, phongbanID }) => {
 
     //Lấy props
-    const nhanvienDataById = phongbanData.find(item => item._id === phongbanID)
+    const phongbanDataById = phongbanData.find(item => item._id === phongbanID)
 
     //State
     const [openInner, setOpenInner] = useState(false);
     const [open, setOpen] = useState(false);
-    const [tenphongban, setTenphongban] = useState(nhanvienDataById.tenphongban)
-    const [truongphong, setTruongphong] = useState(nhanvienDataById.truongphong)
-    const [sdtphongban, setSdtphongban] = useState(nhanvienDataById.sdtphongban)
+    const [tenphongban, setTenphongban] = useState(phongbanDataById.tenphongban)
+    const [truongphong, setTruongphong] = useState(phongbanDataById.truongphong)
+    const [sdtphongban, setSdtphongban] = useState(phongbanDataById.sdtphongban)
     const [error, setError] = useState("")
 
     //Hooks được tạo với react-query
@@ -41,7 +41,7 @@ const QLCapNhatPhongBan = ({ phongbanData, phongbanID }) => {
         setSdtphongban(e.target.value);
     }
 
-    //Thêm nhân viên
+    //Thêm phòng ban
     const onUpdatePhongBan = async (phongban) => {
         await updatePhongBan.mutateAsync(phongban)
     }
@@ -83,7 +83,7 @@ const QLCapNhatPhongBan = ({ phongbanData, phongbanID }) => {
                         <div>
                             {error}
                             <TextField
-                                id="tennhanvien"
+                                id="tenphongban"
                                 onChange={onTenPhongBanChange}
                                 value={tenphongban}
                                 label="Tên Phòng Ban"

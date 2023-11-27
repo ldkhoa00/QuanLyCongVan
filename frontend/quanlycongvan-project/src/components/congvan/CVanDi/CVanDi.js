@@ -18,7 +18,11 @@ const CVanDi = ({ congvandiData }) => {
     }
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 220 },
+        {
+            field: 'id', headerName: 'ID', width: 220, renderCell: (params) => {
+                return <a href={`/congvan/${params.id}`}>{params.id}</a>;
+            },
+        },
         { field: 'kyhieucvan', headerName: 'Ký hiệu', flex: 1 },
         { field: 'ngaygui', headerName: 'Ngày gửi', flex: 1 },
         { field: 'loaicvan', headerName: 'Loại công văn', flex: 1 },
@@ -34,7 +38,7 @@ const CVanDi = ({ congvandiData }) => {
             id: item._id,
             kyhieucvan: item.kyhieucvan,
             ngaygui: item.ngaygui,
-            loaicvan: item.loaicvan,
+            loaicvan: item.loaicvan.tenloaicvan,
             linhvuc: item.linhvuc ? item.linhvuc.tenlinhvuc : "N/A",
             file: item.filename,
             trangthai: item.trangthai === 0 ? "Chưa ký duyệt" : "Đã ký duyệt"

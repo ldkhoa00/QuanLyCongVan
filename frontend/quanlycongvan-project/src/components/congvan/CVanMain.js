@@ -13,6 +13,8 @@ import CVanThem from './CVanThem';
 import CVanXoa from './CVanXoa';
 import CVanUpdate from './CVanUpdate';
 import { useEffect } from 'react';
+import { useGetLinhVuc } from '../../api/LinhVuc/useLinhVuc';
+import { useGetLoaiCVan } from '../../api/LoaiCVan/useLoaiCVan';
 
 const pageStyle = {
     display: 'flex',
@@ -22,13 +24,22 @@ const pageStyle = {
 }
 
 const CVanMain = () => {
-    const [age, setAge] = useState('')
+
     const [value, setValue] = useState('1')
-    //Hooks
+
+    //Lấy data
     const { data: congvanData, isLoading, error } = useGetCongVan();
+    const { data: linhvucData } = useGetLinhVuc();
+    const { data: loaicvanData } = useGetLoaiCVan();
+
+    //Các state
     const [congvandenData, setCongVanDenData] = useState(null)
     const [congvandiData, setCongVanDiData] = useState(null)
     const [congvannoiboData, setCongVanNoiBoData] = useState(null)
+    const [trangthai, setTrangThai] = useState(1);
+    const [linhvuc, setLinhVuc] = useState("");
+    const [loaicvan, setLoaiCvan] = useState("");
+    const [activeTab, setActiveTab] = useState("1");
 
 
     useEffect(() => {
@@ -39,17 +50,90 @@ const CVanMain = () => {
             setCongVanDenData(congvanden)
             setCongVanDiData(congvandi)
             setCongVanNoiBoData(congvannoibo)
+
+ 
         }
     }, [congvanData])
 
-    //Function mẫu thay đổi value của Select
-    const handleChange = (e) => {
-        setAge(e.target.value);
+
+    //MenuItem cho LinhVuc Select
+    let linhvucSelect = null;
+    if (linhvucData) {
+        linhvucSelect = linhvucData.map((linhvuc) => (
+            <MenuItem key={linhvuc._id} value={linhvuc._id}>
+                {linhvuc.tenlinhvuc}
+            </MenuItem>
+        ))
+    }
+
+
+    //MenuItem cho LoaiCVan Select
+    let loaicvanSelect = null;
+    if (loaicvanData) {
+        loaicvanSelect = loaicvanData.map((loaicvan) => (
+            <MenuItem key={loaicvan._id} value={loaicvan._id}>
+                {loaicvan.tenloaicvan}
+            </MenuItem>
+        ))
+    }
+    
+
+    //Function
+    const handleTrangThaiChange = (e) => {
+        setTrangThai(e.target.value);
+    };
+
+    const handleLoaiCVanChange = (e) => {
+        setLoaiCvan(e.target.value)
+    }
+
+    const handleLinhVucChange = (e) => {
+        setLinhVuc(e.target.value)
+    }
+
+    //Function filter lọc thông tin
+    const handleFilter = () => {
+        let filteredCongVan = congvanData.filter((cvan) => {
+            // Check if the linhvuc matches the selected linhvuc or if no linhvuc is selected
+            const linhvucMatch = cvan.linhvuc._id === linhvuc || !linhvuc;
+
+            // Check if the loaicvan matches the selected loaicvan or if no loaicvan is selected
+            const loaicvanMatch = cvan.loaicvan._id === loaicvan || !loaicvan;
+
+            // Check if the trangthai matches the selected trangthai or if no trangthai is selected
+            const trangthaiMatch = cvan.trangthai === trangthai;
+
+
+            // Return true only if both linhvuc and loaicvan match the selected values
+            return linhvucMatch && loaicvanMatch && trangthaiMatch;
+        });
+        if (activeTab === '1') {
+            setCongVanDenData(filteredCongVan.filter((cvan) => cvan.kieucvan === 'Công văn đến'))
+        }
+        else if (activeTab === '2') {
+            setCongVanDiData(filteredCongVan.filter((cvan) => cvan.kieucvan === 'Công văn đi'))
+        }
+        else if (activeTab === '3') {
+            setCongVanNoiBoData(filteredCongVan.filter((cvan) => cvan.kieucvan === 'Công văn nội bộ'))
+        }
+    }
+    
+
+    const handleClearFilters = () => {
+        // Reset state variables to their initial values or null
+        setLoaiCvan("");
+        setLinhVuc("");
+        setTrangThai(1);
+        // Optionally, reset the filtered data to the original data
+        setCongVanDenData(congvandenData);
+        setCongVanDiData(congvandiData);
+        setCongVanNoiBoData(congvannoiboData);
     };
 
     //Function thya đổi Tabs
     const handleChangeTab = (e, newValue) => {
         setValue(newValue);
+        setActiveTab(newValue)
     };
 
     if (isLoading) {
@@ -74,13 +158,11 @@ const CVanMain = () => {
                                 size='small'
                                 select
                                 className='filter-field'
-                                value={age}
-                                label="Người ký duyệt"
-                                onChange={handleChange}
+                                value={loaicvan}
+                                label="Loại công văn"
+                                onChange={handleLoaiCVanChange}
                             >
-                                <MenuItem value={10}>Test</MenuItem>
-                                <MenuItem value={20}>Test2</MenuItem>
-                                <MenuItem value={30}>Test3</MenuItem>
+                                {loaicvanSelect}
                             </TextField>
                         </Grid>
                         <Grid item xs={3}>
@@ -88,13 +170,10 @@ const CVanMain = () => {
                                 size='small'
                                 select
                                 className='filter-field'
-                                value={age}
-                                label="Loại văn bản"
-                                onChange={handleChange}
-                            >
-                                <MenuItem value={10}>Test</MenuItem>
-                                <MenuItem value={20}>Test2</MenuItem>
-                                <MenuItem value={30}>Test3</MenuItem>
+                                value={linhvuc}
+                                label="Lĩnh vực"
+                                onChange={handleLinhVucChange}>
+                                {linhvucSelect}
                             </TextField>
                         </Grid>
                         <Grid item xs={3}>
@@ -102,55 +181,20 @@ const CVanMain = () => {
                                 size='small'
                                 select
                                 className='filter-field'
-                                value={age}
-                                label="Nơi ban hành"
-                                onChange={handleChange}
+                                value={trangthai}
+                                label="Trạng thái"
+                                onChange={handleTrangThaiChange}
                             >
-                                <MenuItem value={10}>Test</MenuItem>
-                                <MenuItem value={20}>Test2</MenuItem>
-                                <MenuItem value={30}>Test3</MenuItem>
+                                <MenuItem value={1}>Đã ký duyệt</MenuItem>
+                                <MenuItem value={0}>Chưa ký duyệt</MenuItem>
                             </TextField>
                         </Grid>
-                        <Grid item xs={3}>
-                            <TextField
-                                size='small'
-                                select
-                                className='filter-field'
-                                value={age}
-                                label="Nơi ban hành"
-                                onChange={handleChange}
-                            >
-                                <MenuItem value={10}>Test</MenuItem>
-                                <MenuItem value={20}>Test2</MenuItem>
-                                <MenuItem value={30}>Test3</MenuItem>
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <TextField
-                                label="Số ký hiệu"
-                                size='small'
-                                className='filter-field'
-                            ></TextField>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <TextField
-                                label="Nội dung"
-                                size='small'
-                                className='filter-field'
-                            ></TextField>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <TextField
-                                label="Nội dung"
-                                size='small'
-                                className='filter-field'
-                            ></TextField>
-                        </Grid>
+
                         <Grid item xs={12}>
                             <div style={{ float: "right", width: "fit-content", display: "flex" }}>
-                                <Button variant="contained" style={{ width: "5rem" }}>CLEAR</Button>
+                                <Button onClick={handleClearFilters} variant="contained" style={{ width: "5rem" }}>CLEAR</Button>
                                 <div style={{ width: "16px" }} />
-                                <Button variant="contained" style={{ width: "5rem" }}>LỌC</Button>
+                                <Button onClick={handleFilter} variant="contained" style={{ width: "5rem" }}>LỌC</Button>
                             </div>
 
                         </Grid>

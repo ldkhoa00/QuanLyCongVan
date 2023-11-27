@@ -21,6 +21,7 @@ const CVanUpdate = ({ kieucvanden, kieucvandi, kieucvannoibo, congvandenID, cong
     const { data: linhvucData } = useGetLinhVuc();
 
     //State
+
     const [congvanDataByID, setCongVanDataByID] = useState("")
     const [openInner, setOpenInner] = useState(false);
     const [open, setOpen] = useState(false);
@@ -41,7 +42,6 @@ const CVanUpdate = ({ kieucvanden, kieucvandi, kieucvannoibo, congvandenID, cong
     const [error, setError] = useState("");
     const [kieucvan, setKieuCVan] = useState("");
     const [congvanID, setCongVanID] = useState("");
-
 
 
     useEffect(() => {
@@ -118,7 +118,7 @@ const CVanUpdate = ({ kieucvanden, kieucvandi, kieucvannoibo, congvandenID, cong
             const selectedFile = e.target.files[0];
             setFile(selectedFile);
         }
-    }
+    };
     const onTrangThaiChange = (e) => {
         setTrangThai(e.target.value);
     }
@@ -147,7 +147,7 @@ const CVanUpdate = ({ kieucvanden, kieucvandi, kieucvannoibo, congvandenID, cong
         setLinhVuc(e.target.value)
     }
 
-    //Update nhân viên
+    //Update công văn
     const onUpdateCongVan = async (congvan) => {
         await updateCongVan.mutateAsync(congvan)
     }
@@ -169,6 +169,7 @@ const CVanUpdate = ({ kieucvanden, kieucvandi, kieucvannoibo, congvandenID, cong
         }
         setError('');
         onUpdateCongVan({
+            chudecvan,
             ngaygui,
             kyhieucvan,
             nguoinhan,

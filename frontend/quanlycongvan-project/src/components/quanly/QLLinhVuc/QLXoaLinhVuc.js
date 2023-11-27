@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Box, Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { FaTrash } from 'react-icons/fa';
-import { useDeletePhongBan } from '../../../api/PhongBan/usePhongBan';
+import { useDeleteLinhVuc } from '../../../api/LinhVuc/useLinhVuc';
 
 
 
-const QLXoaPhongBan = ({ phongbanID }) => {
+const QLXoaLinhVuc = ({ linhvucID }) => {
     //react-query Hooks
-    const deletePhongBan = useDeletePhongBan();
+    const deleteLinhVuc = useDeleteLinhVuc();
 
     //State
     const [open, setOpen] = useState(false);
@@ -21,12 +21,12 @@ const QLXoaPhongBan = ({ phongbanID }) => {
         setOpen(false)
     }
 
-    //Fucntion xóa phòng ban
-    const onDeletePhongBan = async (id) => {
-        await deletePhongBan.mutateAsync(id);
+    //Fucntion xóa lĩnh vực
+    const onDeleteLinhVuc = async (id) => {
+        await deleteLinhVuc.mutateAsync(id);
     }
     const handleDelete = () => {
-        onDeletePhongBan(phongbanID); // Gọi hàm xóa dữ liệu với phongbanID
+        onDeleteLinhVuc(linhvucID); // Gọi hàm xóa dữ liệu với linhvucID
         handleClose(); // Sau khi xóa, đóng hộp thoại
     }
 
@@ -41,7 +41,7 @@ const QLXoaPhongBan = ({ phongbanID }) => {
                 onClose={handleClose}
             >
                 <DialogTitle>
-                    Xóa phòng ban
+                    Xóa lĩnh vực
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={handleClose}>Không đồng ý</Button>
@@ -54,4 +54,4 @@ const QLXoaPhongBan = ({ phongbanID }) => {
     );
 };
 
-export default QLXoaPhongBan;
+export default QLXoaLinhVuc;

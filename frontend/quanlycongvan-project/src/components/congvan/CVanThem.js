@@ -3,7 +3,6 @@ import { Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, TextFie
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useAddCongVan } from '../../api/CongVan/useCongVan';
-import { useGetPhongBan } from '../../api/PhongBan/usePhongBan';
 import { useGetLoaiCVan } from '../../api/LoaiCVan/useLoaiCVan';
 import { useGetLinhVuc } from '../../api/LinhVuc/useLinhVuc';
 const CVanThem = ({ kieucvanden, kieucvandi, kieucvannoibo }) => {
@@ -13,7 +12,6 @@ const CVanThem = ({ kieucvanden, kieucvandi, kieucvannoibo }) => {
     //State
     const [openInner, setOpenInner] = useState(false);
     const [open, setOpen] = useState(false);
-    const [phongban, setPhongBan] = useState("");
     const [ngaygui, setNgayGui] = useState("");
     const [nguoinhan, setNguoiNhan] = useState("");
     const [trichyeu, setTrichYeu] = useState("");
@@ -45,7 +43,6 @@ const CVanThem = ({ kieucvanden, kieucvandi, kieucvannoibo }) => {
 
     //Hooks
     const addCongVan = useAddCongVan();
-    const { data: phongbanData } = useGetPhongBan();
     const { data: loaicvanData } = useGetLoaiCVan();
     const { data: linhvucData } = useGetLinhVuc();
 
@@ -93,9 +90,6 @@ const CVanThem = ({ kieucvanden, kieucvandi, kieucvannoibo }) => {
     const onChuDeCVanChange = (e) => {
         setChuDeCVan(e.target.value)
     }
-    const onPhongBanChange = (e) => {
-        setPhongBan(e.target.value)
-    }
     const onKyHieuCVanChange = (e) => {
         setKyHieuCVan(e.target.value)
     }
@@ -109,7 +103,8 @@ const CVanThem = ({ kieucvanden, kieucvandi, kieucvannoibo }) => {
     }
 
     const onSubmitCongVan = () => {
-        if (!ngaygui ||
+        if (!chudecvan ||
+            !ngaygui ||
             !nguoinhan ||
             !trichyeu ||
             !noidung ||
@@ -124,19 +119,6 @@ const CVanThem = ({ kieucvanden, kieucvandi, kieucvannoibo }) => {
             setError('Please fill in all required fields');
         }
         setError('');
-        // const formData = new FormData();
-        // formData.append('ngaygui', ngaygui);
-        // formData.append('kyhieucvan', kyhieucvan);
-        // formData.append('nguoinhan', nguoinhan);
-        // formData.append('trichyeu', trichyeu);
-        // formData.append('noidung', noidung);
-        // formData.append('file', file);
-        // formData.append('trangthai', trangthai);
-        // formData.append('coquanbanhanh', coquanbanhanh);
-        // formData.append('noiluubanchinh', noiluubanchinh);
-        // formData.append('loaicvan', loaicvan);
-        // formData.append('linhvuc', linhvuc);
-        // formData.append('kieucvan', kieucvan);
         onAddCongVan({
             ngaygui,
             kyhieucvan,
@@ -150,18 +132,9 @@ const CVanThem = ({ kieucvanden, kieucvandi, kieucvannoibo }) => {
             loaicvan,
             linhvuc,
             kieucvan,
+            chudecvan
         });
         handleClose();
-    }
-
-    //MenuItem cho PhongBan Select
-    let phongbanSelect = null;
-    if (phongbanData) {
-        phongbanSelect = phongbanData.map((phongban) => (
-            <MenuItem key={phongban._id} value={phongban._id}>
-                {phongban.tenphongban}
-            </MenuItem>
-        ))
     }
 
     //MenuItem cho LoaiCVan Select
@@ -278,14 +251,6 @@ const CVanThem = ({ kieucvanden, kieucvandi, kieucvannoibo }) => {
                                     select
                                     label="Loại công văn">
                                     {loaicvanSelect}
-                                </TextField>
-                                <TextField
-                                    id="outlined-select-department"
-                                    onChange={onPhongBanChange}
-                                    value={phongban}
-                                    select
-                                    label="Phòng ban">
-                                    {phongbanSelect}
                                 </TextField>
                                 <input
                                     onChange={onFileChange}

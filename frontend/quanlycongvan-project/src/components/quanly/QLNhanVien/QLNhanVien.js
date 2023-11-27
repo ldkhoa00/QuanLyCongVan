@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import QLThemNhanVien from './QLThemNhanVien';
@@ -24,6 +24,19 @@ const QLNhanVien = () => {
     //Lấy data
     const { data: nhanvienData, isLoading, error } = useGetNhanVien();
     const { data: phongbanData } = useGetPhongBan();
+
+    //State
+    //NhanVien được search
+    const [filteredNhanVien, setFilteredNhanVien] = useState("");
+
+
+    //useEffect
+    useEffect(() => {
+        if (nhanvienData) {
+            setFilteredNhanVien(nhanvienData)
+        }
+    }, [nhanvienData])
+
 
 
     //Render custom DataGrid
@@ -54,7 +67,7 @@ const QLNhanVien = () => {
     ];
 
     //Rows
-    const rows = nhanvienData ? [...nhanvienData].reverse().map((item) => {
+    const rows = filteredNhanVien ? [...filteredNhanVien].reverse().map((item) => {
         return {
             id: item._id,
             tennhanvien: item.tennhanvien,
@@ -65,6 +78,8 @@ const QLNhanVien = () => {
         };
     }) : [];
 
+
+
     if (isLoading) {
         return "Loading..."
     }
@@ -73,11 +88,20 @@ const QLNhanVien = () => {
         return <div>{error.message}</div>;
     }
 
+    //Search method
+    const handleSearchNhanVien = (query) => {
+        if (nhanvienData) {
+            var searchResult = nhanvienData.filter((nhanvien) => nhanvien.tennhanvien.toLowerCase().indexOf(query.toLowerCase()) !== -1); //đưa tất cả về lowercase
+            setFilteredNhanVien(searchResult);
+        }
+
+    }
+
     return (
         <Box style={pageStyle}>
             <div className='app-bar'>
                 <div className="search-bar">
-                    <SearchBar />
+                    <SearchBar handleSearchNhanVien={handleSearchNhanVien} />
                 </div>
                 <div className='space-width' />
                 <div className="add-button">

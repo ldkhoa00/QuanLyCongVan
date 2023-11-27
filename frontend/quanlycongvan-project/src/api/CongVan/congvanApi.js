@@ -38,6 +38,7 @@ export const addCongVan = async (congvan) => {
 }
 
 export const updateCongVan = async (congvan) => {
+    console.log(congvan)
     const formData = new FormData();
     for (const key in congvan) {
         formData.append(key, congvan[key]);

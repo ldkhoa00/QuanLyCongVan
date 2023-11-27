@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import QLThemPhongBan from './QLThemPhongBan';
-import QLXoaPhongBan from './QLXoaPhongBan'
-import QLCapNhatPhongBan from './QLCapNhatPhongBan'
+import QLThemLinhVuc from './QLThemLinhVuc';
+import QLXoaLinhVuc from './QLXoaLinhVuc'
+import QLCapNhatLinhVuc from './QLCapNhatLinhVuc'
 import SearchBar from '../../global/SearchBar';
 import '../quanly.css'
-import { useGetPhongBan } from '../../../api/PhongBan/usePhongBan';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useGetLinhVuc } from '../../../api/LinhVuc/useLinhVuc';
 
 
-const QLPhongBan = () => {
+const QLLinhVuc = () => {
     const pageStyle = {
         display: 'flex',
         flexDirection: 'column',
@@ -19,26 +17,27 @@ const QLPhongBan = () => {
         margin: "auto",
         width: "100%"
     }
+
     //Lấy data
-    const { data: phongbanData, isLoading, error } = useGetPhongBan();
+    const { data: linhvucData, isLoading, error } = useGetLinhVuc();
 
     //******* Chức năng search *******
-    //PhongBan được search
-    const [filteredPhongBan, setFilteredPhongBan] = useState("");
+    //LinhVuc được search
+    const [filteredLinhVuc, setFilteredLinhVuc] = useState("");
 
 
     //useEffect
     useEffect(() => {
-        if (phongbanData) {
-            setFilteredPhongBan(phongbanData)
+        if (linhvucData) {
+            setFilteredLinhVuc(linhvucData)
         }
-    }, [phongbanData])
+    }, [linhvucData])
 
     //Search method
-    const handleSearchPhongBan = (query) => {
-        if (phongbanData) {
-            var searchResult = phongbanData.filter((phongban) => phongban.tenphongban.toLowerCase().indexOf(query.toLowerCase()) !== -1); //đưa tất cả về lowercase
-            setFilteredPhongBan(searchResult);
+    const handleSearchLinhVuc = (query) => {
+        if (linhvucData) {
+            var searchResult = linhvucData.filter((linhvuc) => linhvuc.tenlinhvuc.toLowerCase().indexOf(query.toLowerCase()) !== -1); //đưa tất cả về lowercase
+            setFilteredLinhVuc(searchResult);
         }
 
     }
@@ -46,22 +45,23 @@ const QLPhongBan = () => {
     //*************************************/
 
 
-
     if (isLoading) {
-        return "Cò lỗi gì đó đã xảy ra"
+        return "Có lỗi gì đó đã xảy ra"
     }
 
     if (error) {
         return <div>{error.message}</div>;
     }
 
+
+
     //Hiển thị option cho list
     const renderButton = (params) => {
         return (
             <div style={{ display: "flex" }}>
-                <QLCapNhatPhongBan phongbanID={params.row.id} phongbanData={phongbanData} />
+                <QLCapNhatLinhVuc linhvucID={params.row.id} linhvucData={linhvucData} />
                 <div className='space-width' />
-                <QLXoaPhongBan phongbanID={params.row.id} />
+                <QLXoaLinhVuc linhvucID={params.row.id} />
             </div>
         )
     }
@@ -69,30 +69,28 @@ const QLPhongBan = () => {
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 220 },
-        { field: 'tenphongban', headerName: 'Tên phòng ban', flex: 1 },
-        { field: 'truongphong', headerName: 'Trưởng phòng', flex: 1 },
-        { field: 'sdtphongban', headerName: 'Số ĐT Phòng', flex: 1 },
+        { field: 'tenlinhvuc', headerName: 'Tên lĩnh vực', flex: 1 },
+        { field: 'kyhieu', headerName: 'Ký hiệu', flex: 1 },
         { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
     ];
 
     //Rows
-    const rows = filteredPhongBan ? [...filteredPhongBan].reverse().map((item) => {
+    const rows = filteredLinhVuc ? [...filteredLinhVuc].reverse().map((item) => {
         return {
             id: item._id,
-            tenphongban: item.tenphongban,
-            truongphong: item.truongphong,
-            sdtphongban: item.sdtphongban
+            tenlinhvuc: item.tenlinhvuc,
+            kyhieu: item.kyhieu
         };
     }) : [];
     return (
         <Box style={pageStyle}>
             <div className='app-bar'>
                 <div className="search-bar">
-                    <SearchBar handleSearchPhongBan={handleSearchPhongBan} />
+                    <SearchBar handleSearchLinhVuc={handleSearchLinhVuc} />
                 </div>
                 <div className='space-width' />
                 <div className="add-button">
-                    <QLThemPhongBan />
+                    <QLThemLinhVuc />
                 </div>
             </div>
 
@@ -114,4 +112,4 @@ const QLPhongBan = () => {
     );
 };
 
-export default QLPhongBan;
+export default QLLinhVuc;

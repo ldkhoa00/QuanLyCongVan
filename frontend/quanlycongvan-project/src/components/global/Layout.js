@@ -4,13 +4,13 @@ import SideNavigationBar from './SideNavigationBar';
 //Style
 const layoutStyle = {
     display: "flex",
-    height: "100vh",
+    height: "100%",
 }
 const contentContainerStyle = {
     padding: "16px",
     margin: "0",
     height: 'fit-cotent',
-    width: "100%"
+    width: "83%"
 }
 
 

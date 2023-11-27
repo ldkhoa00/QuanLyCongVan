@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import { Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, TextField } from '@mui/material';
-import { useAddPhongBan } from '../../../api/PhongBan/usePhongBan';
+import { useAddLinhVuc } from '../../../api/LinhVuc/useLinhVuc';
 
 
 
-const QLThemPhongBan = () => {
+const QLThemLinhVuc = () => {
 
     //State
     const [openInner, setOpenInner] = useState(false);
     const [open, setOpen] = useState(false);
-    const [tenphongban, setTenphongban] = useState("")
-    const [truongphong, setTruongphong] = useState("")
-    const [sdtphongban, setSdtphongban] = useState("")
+    const [tenlinhvuc, setTenlinhvuc] = useState("")
+    const [kyhieu, setKyhieu] = useState("")
     const [error, setError] = useState("")
 
     //Hooks được tạo với react-query
-    const addPhongBan = useAddPhongBan();
+    const addLinhVuc = useAddLinhVuc();
 
     //Function
     const handleOpen = () => {
@@ -26,30 +25,26 @@ const QLThemPhongBan = () => {
         setOpenInner(false)
     }
 
-    const onTenPhongBanChange = (e) => {
-        setTenphongban(e.target.value);
+    const onTenLinhVucChange = (e) => {
+        setTenlinhvuc(e.target.value);
     }
-    const onTruongPhongChange = (e) => {
-        setTruongphong(e.target.value);
-    }
-    const onSdtPhongBanChange = (e) => {
-        setSdtphongban(e.target.value);
+    const onKyHieuChange = (e) => {
+        setKyhieu(e.target.value);
     }
 
-    //Thêm phòng ban
-    const onAddPhongBan = async (phongban) => {
-        await addPhongBan.mutateAsync(phongban)
+    //Thêm lĩnh vực
+    const onAddLinhVuc = async (linhvuc) => {
+        await addLinhVuc.mutateAsync(linhvuc)
     }
 
-    const onSubmitPhongBan = () => {
-        if (!tenphongban || !truongphong || !sdtphongban) {
+    const onSubmitLinhVuc = () => {
+        if (!tenlinhvuc || !kyhieu) {
             setError('Please fill in all required fields');
         }
         setError('');
-        onAddPhongBan({
-            tenphongban,
-            truongphong,
-            sdtphongban,
+        onAddLinhVuc({
+            tenlinhvuc,
+            kyhieu
         })
         handleClose()
     }
@@ -64,7 +59,7 @@ const QLThemPhongBan = () => {
                 onClose={handleClose}
             >
                 <DialogTitle>
-                    Thêm phòng ban
+                    Thêm lĩnh vực
                 </DialogTitle>
                 <DialogContent>
                     <Box
@@ -77,29 +72,23 @@ const QLThemPhongBan = () => {
                         <div>
                             {error}
                             <TextField
-                                id="tenphongban"
-                                onChange={onTenPhongBanChange}
-                                value={tenphongban}
-                                label="Tên Phòng Ban"
+                                id="tennhanvien"
+                                onChange={onTenLinhVucChange}
+                                value={tenlinhvuc}
+                                label="Tên Lĩnh Vực"
                                 variant="outlined" />
                             <TextField
-                                id="truongphong"
-                                onChange={onTruongPhongChange}
-                                value={truongphong}
-                                label="Trưởng Phòng"
-                                variant="outlined" />
-                            <TextField
-                                id="sdtphongban"
-                                onChange={onSdtPhongBanChange}
-                                value={sdtphongban}
-                                label="SDT Phòng ban"
+                                id="kyhieu"
+                                onChange={onKyHieuChange}
+                                value={kyhieu}
+                                label="Ký Hiệu"
                                 variant="outlined" />
                         </div>
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>HỦY</Button>
-                    <Button onClick={onSubmitPhongBan} autoFocus>
+                    <Button onClick={onSubmitLinhVuc} autoFocus>
                         XÁC NHẬN
                     </Button>
                 </DialogActions>
@@ -109,7 +98,7 @@ const QLThemPhongBan = () => {
                 onClose={handleClose}
             >
                 <DialogTitle>
-                    Thêm phòng ban thành công
+                    Thêm lĩnh vực thành công
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={handleClose} autoFocus>
@@ -121,4 +110,4 @@ const QLThemPhongBan = () => {
     );
 };
 
-export default QLThemPhongBan;
+export default QLThemLinhVuc;
