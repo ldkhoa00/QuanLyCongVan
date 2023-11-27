@@ -12,7 +12,7 @@ const corsOptions = {
 
 const app = express()
 
-mongoose.connect('mongodb://localhost:27017')
+mongoose.connect("mongodb://localhost:27017")
 const db = mongoose.connection
 
 //event bắt lỗi khi đã connect database

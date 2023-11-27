@@ -15,7 +15,7 @@ const getAllLinhvucs = async (req, res) => {
 const createLinhvuc = async (req, res) => {
     const linhvuc = new Linhvuc({
         tenlinhvuc: req.body.tenlinhvuc,
-        kyhieu: req.body.kyhieu,
+        kyhieu: req.body.kyhieu
     })
     try {
         const newLinhvuc = await linhvuc.save();

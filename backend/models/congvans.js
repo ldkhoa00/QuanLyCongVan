@@ -25,9 +25,8 @@ const congvanSchema = new mongoose.Schema({
         required: false
     },
     ngaygui: {
-        type: Date,
+        type: String,
         required: false,
-        default: Date.now
     },
     file: {
         type: Buffer,
@@ -36,6 +35,10 @@ const congvanSchema = new mongoose.Schema({
     filename: {
         type: String,
         required: false
+    },
+    fileurl: {
+        type: String,
+        require: false
     },
     chudecvan: {
         type: String,
@@ -57,10 +60,10 @@ const congvanSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Loaicvan'
     },
-    phongban: {
+    phongban: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Phongban'
-    },
+    }],
     linhvuc: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Linhvuc'
