@@ -8,6 +8,7 @@ import SearchBar from '../../global/SearchBar';
 import '../quanly.css'
 import { useGetNhanVien } from '../../../api/NhanVien/useNhanVien';
 import { useGetPhongBan } from '../../../api/PhongBan/usePhongBan';
+import { isUserAllow } from '../../../utils/utils';
 
 
 const QLNhanVien = () => {
@@ -63,7 +64,7 @@ const QLNhanVien = () => {
         { field: 'email', headerName: 'Email', flex: 1 },
         { field: 'sdtnhanvien', headerName: 'Số điện thoại', flex: 1 },
         { field: 'diachi', headerName: 'Địa chỉ', flex: 1 },
-        { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
+        isUserAllow() ? "" : { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
     ];
 
     //Rows
@@ -105,7 +106,7 @@ const QLNhanVien = () => {
                 </div>
                 <div className='space-width' />
                 <div className="add-button">
-                    <QLThemNhanVien nhanvienData={nhanvienData} phongbanData={phongbanData} />
+                    <QLThemNhanVien isUserAllow={isUserAllow} nhanvienData={nhanvienData} phongbanData={phongbanData} />
                 </div>
             </div>
 

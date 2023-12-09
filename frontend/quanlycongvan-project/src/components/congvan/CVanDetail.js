@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Button, Checkbox } from '@mui/material';
 import { Grid } from '@material-ui/core';
-import { useUpdateCongVan, useGetCongVanById, useGetCongVan } from '../../api/CongVan/useCongVan';
+import { useUpdateCongVan, useGetCongVanById } from '../../api/CongVan/useCongVan';
 import { useGetPhongBan } from '../../api/PhongBan/usePhongBan';
 import { Document, Page, pdfjs } from 'react-pdf';
 import "./congvan.css"

@@ -4,6 +4,17 @@ const loaicvanApi = axios.create({
     baseURL: "http://localhost:8000"
 })
 
+// Thêm interceptors để cấu hình request trước khi được gửi đi
+loaicvanApi.interceptors.request.use(config => {
+    // Thêm header vào request
+    config.headers['auth-token'] = localStorage.getItem("token");
+    return config;
+}, error => {
+    // Xử lý lỗi nếu có
+    return Promise.reject(error);
+});
+
+
 export const getLoaiCVan = async (loaicvan) => {
     const response = await loaicvanApi.get("/loaicvans/", loaicvan)
     return response.data;

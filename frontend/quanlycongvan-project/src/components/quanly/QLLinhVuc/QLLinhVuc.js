@@ -7,7 +7,7 @@ import QLCapNhatLinhVuc from './QLCapNhatLinhVuc'
 import SearchBar from '../../global/SearchBar';
 import '../quanly.css'
 import { useGetLinhVuc } from '../../../api/LinhVuc/useLinhVuc';
-
+import { isUserAllow } from '../../../utils/utils';
 
 const QLLinhVuc = () => {
     const pageStyle = {
@@ -71,7 +71,7 @@ const QLLinhVuc = () => {
         { field: 'id', headerName: 'ID', width: 220 },
         { field: 'tenlinhvuc', headerName: 'Tên lĩnh vực', flex: 1 },
         { field: 'kyhieu', headerName: 'Ký hiệu', flex: 1 },
-        { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
+        isUserAllow() ? "" : { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
     ];
 
     //Rows
@@ -90,7 +90,7 @@ const QLLinhVuc = () => {
                 </div>
                 <div className='space-width' />
                 <div className="add-button">
-                    <QLThemLinhVuc />
+                    <QLThemLinhVuc isUserAllow={isUserAllow} />
                 </div>
             </div>
 

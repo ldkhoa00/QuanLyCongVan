@@ -1,40 +1,64 @@
 import React from 'react';
+import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import CVanThem from '../CVanThem';
-import CVanXoa from '../CVanXoa';
-import CVanUpdate from '../CVanUpdate';
-import SearchBar from '../../global/SearchBar';
+import SearchBar from '../global/SearchBar';
+import '../quanly/quanly.css'
 import { useState } from 'react';
+import { useGetCongVan } from '../../api/CongVan/useCongVan';
+import { useGetUserById } from '../../api/User/useUser';
 
-const CVanDen = ({ congvandenData, isUserAllow }) => {
 
-    //Hiển thị option cho list
-    const renderButton = (params) => {
-        return (
-            <div style={{ display: "flex" }}>
-                <CVanUpdate isUserAllow={isUserAllow} kieucvanden={"Công văn đến"} congvandenID={params.row.id} />
-                <div className='space-width' />
-                <CVanXoa isUserAllow={isUserAllow} congvandenID={params.row.id} />
-            </div >
-        )
+const UserListCongVan = () => {
+    const pageStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        position: "relative",
+        margin: "auto",
+        width: "100%"
     }
-    //Search
-    //CongVan được search
-    const [filteredCongVanDen, setFilteredCongVanDen] = useState([]);
+    //Lấy userID
+    const userID = localStorage.getItem("userID")
+
+    //Lấy data
+    const { data: congvanData } = useGetCongVan();
+    const { data: userData } = useGetUserById(userID);
+
+    //function
+    // Hàm lọc để lấy danh sách công văn
+    let danhSachCongVan = null;
+    if (congvanData && userData) {
+        const userPhongBanID = userData.phongban._id;
+
+        // Lọc các công văn theo điều kiện phongbanID trùng nhau
+        danhSachCongVan = congvanData.filter(congvan => {
+            return congvan.phongban.some(pb => pb._id === userPhongBanID);
+        });
+
+    }
+
+
+
+
+    //******* Chức năng search *******
+    //NhanVien được search
+    const [filteredCongVan, setFilteredCongVan] = useState([]);
 
     //Search method
-    const handleSearchCongVanDen = (query) => {
-        if (congvandenData) {
+    const handleSearchCongVan = (query) => {
+        if (danhSachCongVan) {
             if (query === '') {
-                setFilteredCongVanDen(congvandenData);
+                setFilteredCongVan(danhSachCongVan);
             } else {
-                var searchResult = congvandenData.filter((congvan) =>
+                var searchResult = danhSachCongVan.filter((congvan) =>
                     congvan.chudecvan.toLowerCase().indexOf(query.toLowerCase()) !== -1
                 );
-                setFilteredCongVanDen(searchResult);
+                setFilteredCongVan(searchResult);
             }
         }
     }
+    //*************************************/
+
+
 
     const columns = [
         {
@@ -53,15 +77,15 @@ const CVanDen = ({ congvandenData, isUserAllow }) => {
             }
         },
         { field: 'trangthai', headerName: 'Trạng thái', flex: 1 },
-        isUserAllow() ? "" : { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
+        // { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
     ];
 
     //Rows
-    const rows = filteredCongVanDen ? [...filteredCongVanDen].reverse().map((item) => {
+    const rows = filteredCongVan ? [...filteredCongVan].reverse().map((item) => {
         return {
             id: item._id,
+            chudecvan: item.chudecvan,
             kyhieucvan: item.kyhieucvan,
-            chudecvan:item.chudecvan,
             ngaygui: item.ngaygui,
             loaicvan: item.loaicvan.tenloaicvan,
             linhvuc: item.linhvuc ? item.linhvuc.tenlinhvuc : "N/A",
@@ -71,11 +95,17 @@ const CVanDen = ({ congvandenData, isUserAllow }) => {
         };
     }) : [];
 
+
     return (
-        <>
-            <div style={{ float: "right" }}><CVanThem isUserAllow={isUserAllow} kieucvanden={"Công văn đến"} /></div>
-            <h5>Công văn đến</h5>
-            <SearchBar handleSearchCongVanDen={handleSearchCongVanDen} />
+        <Box style={pageStyle}>
+            <div className='app-bar'>
+                <div className="search-bar">
+                    <SearchBar handleSearchCongVan={handleSearchCongVan} />
+                </div>
+                <div className='space-width' />
+            </div>
+
+            <div className='space-height' />
             <div style={{ height: '100%', width: '100%' }}>
                 <DataGrid
                     rows={rows}
@@ -89,8 +119,8 @@ const CVanDen = ({ congvandenData, isUserAllow }) => {
                     checkboxSelection
                 />
             </div>
-        </>
+        </Box>
     );
 };
 
-export default CVanDen;
+export default UserListCongVan;

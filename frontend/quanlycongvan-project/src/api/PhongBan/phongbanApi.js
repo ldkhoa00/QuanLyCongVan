@@ -4,6 +4,17 @@ const phongbanApi = axios.create({
     baseURL: "http://localhost:8000"
 })
 
+// Thêm interceptors để cấu hình request trước khi được gửi đi
+phongbanApi.interceptors.request.use(config => {
+    // Thêm header vào request
+    config.headers['auth-token'] = localStorage.getItem("token");
+    return config;
+}, error => {
+    // Xử lý lỗi nếu có
+    return Promise.reject(error);
+});
+
+
 export const getPhongBan = async (phongban) => {
     const response = await phongbanApi.get("/phongbans/", phongban)
     return response.data;
@@ -14,7 +25,7 @@ export const getPhongBanById = async (id) => {
     return response.data;
 }
 
-export const addPhongBan = async ( phongban ) => {
+export const addPhongBan = async (phongban) => {
     return await phongbanApi.post(`/phongbans/`, phongban)
 }
 

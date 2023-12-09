@@ -4,20 +4,14 @@ const congvanApi = axios.create({
     baseURL: "http://localhost:8000"
 })
 
-//Lấy JWT token
-// congvanApi.interceptors.request.use(
-//     (config) => {
-//         const storedToken = localStorage.getItem('token');
-//         if (storedToken) {
-//             const token = JSON.parse(storedToken).data;
-//             config.headers.Authorization = `Bearer ${token}`;
-//         }
-//         return config;
-//     },
-//     (error) => {
-//         Promise.reject(error);
-//     }
-// );
+congvanApi.interceptors.request.use(config => {
+    // Thêm header vào request
+    config.headers['auth-token'] = localStorage.getItem("token");
+    return config;
+}, error => {
+    // Xử lý lỗi nếu có
+    return Promise.reject(error);
+});
 
 export const getCongVan = async (congvan) => {
     const response = await congvanApi.get("/congvans/", congvan)

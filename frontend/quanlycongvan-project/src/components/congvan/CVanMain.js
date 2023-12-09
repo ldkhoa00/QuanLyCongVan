@@ -15,6 +15,7 @@ import CVanUpdate from './CVanUpdate';
 import { useEffect } from 'react';
 import { useGetLinhVuc } from '../../api/LinhVuc/useLinhVuc';
 import { useGetLoaiCVan } from '../../api/LoaiCVan/useLoaiCVan';
+import { isUserAllow } from '../../utils/utils'
 
 const pageStyle = {
     display: 'flex',
@@ -51,7 +52,6 @@ const CVanMain = () => {
             setCongVanDiData(congvandi)
             setCongVanNoiBoData(congvannoibo)
 
- 
         }
     }, [congvanData])
 
@@ -76,7 +76,7 @@ const CVanMain = () => {
             </MenuItem>
         ))
     }
-    
+
 
     //Function
     const handleTrangThaiChange = (e) => {
@@ -117,7 +117,7 @@ const CVanMain = () => {
             setCongVanNoiBoData(filteredCongVan.filter((cvan) => cvan.kieucvan === 'Công văn nội bộ'))
         }
     }
-    
+
 
     const handleClearFilters = () => {
         // Reset state variables to their initial values or null
@@ -129,6 +129,7 @@ const CVanMain = () => {
         setCongVanDiData(congvandiData);
         setCongVanNoiBoData(congvannoiboData);
     };
+
 
     //Function thya đổi Tabs
     const handleChangeTab = (e, newValue) => {
@@ -221,13 +222,13 @@ const CVanMain = () => {
                                 </TabList>
                             </Box>
                             <TabPanel value='1'>
-                                <CVanDen congvandenData={congvandenData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
+                                <CVanDen isUserAllow={isUserAllow} congvandenData={congvandenData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
                             </TabPanel>
                             <TabPanel value='2'>
-                                <CVanDi congvandiData={congvandiData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
+                                <CVanDi isUserAllow={isUserAllow} congvandiData={congvandiData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
                             </TabPanel>
                             <TabPanel value='3'>
-                                <CVanNoiBo congvannoiboData={congvannoiboData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
+                                <CVanNoiBo isUserAllow={isUserAllow} congvannoiboData={congvannoiboData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
                             </TabPanel>
                         </TabContext>
                     </Box>

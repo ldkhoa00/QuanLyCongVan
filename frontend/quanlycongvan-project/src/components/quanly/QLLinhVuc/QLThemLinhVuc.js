@@ -4,7 +4,7 @@ import { useAddLinhVuc } from '../../../api/LinhVuc/useLinhVuc';
 
 
 
-const QLThemLinhVuc = () => {
+const QLThemLinhVuc = ({ isUserAllow }) => {
 
     //State
     const [openInner, setOpenInner] = useState(false);
@@ -51,7 +51,7 @@ const QLThemLinhVuc = () => {
 
     return (
         <Box>
-            <Button variant="outlined" onClick={handleOpen} size='large'>
+            <Button style={{ display: isUserAllow() ? 'none' : 'inline-block' }} variant="outlined" onClick={handleOpen} size='large'>
                 Thêm
             </Button>
             <Dialog

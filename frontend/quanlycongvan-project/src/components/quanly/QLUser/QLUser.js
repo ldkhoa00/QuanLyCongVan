@@ -1,18 +1,18 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import QLThemPhongBan from './QLThemPhongBan';
-import QLXoaPhongBan from './QLXoaPhongBan'
-import QLCapNhatPhongBan from './QLCapNhatPhongBan'
+import QLThemUser from './QLThemUser';
+import QLXoaUser from './QLXoaUser'
 import SearchBar from '../../global/SearchBar';
 import '../quanly.css'
-import { useGetPhongBan } from '../../../api/PhongBan/usePhongBan';
+import { useGetUser } from '../../../api/User/useUser';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { isUserAllow } from '../../../utils/utils';
+import { useGetPhongBan } from '../../../api/PhongBan/usePhongBan';
 
 
-const QLPhongBan = () => {
+
+const QLUser = () => {
     const pageStyle = {
         display: 'flex',
         flexDirection: 'column',
@@ -21,25 +21,26 @@ const QLPhongBan = () => {
         width: "100%"
     }
     //Lấy data
-    const { data: phongbanData, isLoading, error } = useGetPhongBan();
+    const { data: phongbanData } = useGetPhongBan();
+    const { data: userData, isLoading, error } = useGetUser();
 
     //******* Chức năng search *******
-    //PhongBan được search
-    const [filteredPhongBan, setFilteredPhongBan] = useState("");
+    //User được search
+    const [filteredUser, setFilteredUser] = useState("");
 
 
     //useEffect
     useEffect(() => {
-        if (phongbanData) {
-            setFilteredPhongBan(phongbanData)
+        if (userData) {
+            setFilteredUser(userData)
         }
-    }, [phongbanData])
+    }, [userData])
 
     //Search method
-    const handleSearchPhongBan = (query) => {
-        if (phongbanData) {
-            var searchResult = phongbanData.filter((phongban) => phongban.tenphongban.toLowerCase().indexOf(query.toLowerCase()) !== -1); //đưa tất cả về lowercase
-            setFilteredPhongBan(searchResult);
+    const handleSearchUser = (query) => {
+        if (userData) {
+            var searchResult = userData.filter((user) => user.tenuser.toLowerCase().indexOf(query.toLowerCase()) !== -1); //đưa tất cả về lowercase
+            setFilteredUser(searchResult);
         }
 
     }
@@ -49,7 +50,7 @@ const QLPhongBan = () => {
 
 
     if (isLoading) {
-        return "Cò lỗi gì đó đã xảy ra"
+        return "Loading..."
     }
 
     if (error) {
@@ -60,9 +61,7 @@ const QLPhongBan = () => {
     const renderButton = (params) => {
         return (
             <div style={{ display: "flex" }}>
-                <QLCapNhatPhongBan phongbanID={params.row.id} phongbanData={phongbanData} />
-                <div className='space-width' />
-                <QLXoaPhongBan phongbanID={params.row.id} />
+                <QLXoaUser userID={params.row.id} />
             </div>
         )
     }
@@ -70,30 +69,33 @@ const QLPhongBan = () => {
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 220 },
-        { field: 'tenphongban', headerName: 'Tên phòng ban', flex: 1 },
-        { field: 'truongphong', headerName: 'Trưởng phòng', flex: 1 },
-        { field: 'sdtphongban', headerName: 'Số ĐT Phòng', flex: 1 },
-        isUserAllow() ? "" : { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
+        { field: 'name', headerName: 'Tên người dùng', flex: 1 },
+        { field: 'email', headerName: 'Email', flex: 1 },
+        { field: 'phongban', headerName: 'Phòng', flex: 1 },
+        { field: 'role', headerName: 'Quyền hạn', flex: 1 },
+        { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
     ];
 
     //Rows
-    const rows = filteredPhongBan ? [...filteredPhongBan].reverse().map((item) => {
+    const rows = filteredUser ? [...filteredUser].reverse().map((item) => {
         return {
             id: item._id,
-            tenphongban: item.tenphongban,
-            truongphong: item.truongphong,
-            sdtphongban: item.sdtphongban
+            name: item.name,
+            email: item.email,
+            role:item.role,
+            phongban: item.phongban.tenphongban
         };
     }) : [];
+
     return (
         <Box style={pageStyle}>
             <div className='app-bar'>
                 <div className="search-bar">
-                    <SearchBar handleSearchPhongBan={handleSearchPhongBan} />
+                    <SearchBar handleSearchUser={handleSearchUser} />
                 </div>
                 <div className='space-width' />
                 <div className="add-button">
-                    <QLThemPhongBan isUserAllow={isUserAllow} />
+                    <QLThemUser phongbanData={phongbanData} />
                 </div>
             </div>
 
@@ -115,4 +117,4 @@ const QLPhongBan = () => {
     );
 };
 
-export default QLPhongBan;
+export default QLUser;

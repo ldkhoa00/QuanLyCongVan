@@ -10,7 +10,7 @@ const contentContainerStyle = {
     padding: "16px",
     margin: "0",
     height: 'fit-cotent',
-    width: "83%"
+    width: "85%"
 }
 
 

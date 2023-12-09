@@ -12,7 +12,7 @@ const corsOptions = {
 
 const app = express()
 
-mongoose.connect("mongodb://localhost:27017")
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
 const db = mongoose.connection
 
 //event bắt lỗi khi đã connect database
@@ -47,6 +47,10 @@ app.use('/linhvucs', linhvucRouter) //thiết lập đường dẫn sử dụng
 //lấy route nhanvien
 const nhanvienRouter = require('./routes/nhanvienRoutes')
 app.use('/nhanviens', nhanvienRouter) //thiết lập đường dẫn sử dụng
+
+//lấy route nhanvien
+const userRouter = require('./routes/userRoutes')
+app.use('/users', userRouter) //thiết lập đường dẫn sử dụng
 
 //listen trên port 8000
 app.listen(8000, () => console.log('Server started')) 

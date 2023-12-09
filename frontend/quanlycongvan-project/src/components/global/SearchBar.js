@@ -13,6 +13,10 @@ const SearchBar = (props) => {
     const handleSearchNhanVien = props.handleSearchNhanVien;
     const handleSearchPhongBan = props.handleSearchPhongBan;
     const handleSearchLinhVuc = props.handleSearchLinhVuc;
+    const handleSearchCongVan = props.handleSearchCongVan;
+    const handleSearchCongVanDen = props.handleSearchCongVanDen;
+    const handleSearchCongVanDi = props.handleSearchCongVanDi;
+    const handleSearchCongVanNoiBo = props.handleSearchCongVanNoiBo;
 
     const [searchQuery, setSearchQuery] = useState("")
 
@@ -30,7 +34,28 @@ const SearchBar = (props) => {
         else if (handleSearchLinhVuc) {
             handleSearchLinhVuc(searchQuery)
         }
-    }, [searchQuery, handleSearchNhanVien, handleSearchPhongBan, handleSearchLinhVuc])
+        else if (handleSearchCongVan) {
+            handleSearchCongVan(searchQuery)
+        }
+        else if (handleSearchCongVanDen) {
+            handleSearchCongVanDen(searchQuery)
+        }
+        else if (handleSearchCongVanDi) {
+            handleSearchCongVanDi(searchQuery)
+        }
+        else if (handleSearchCongVanNoiBo) {
+            handleSearchCongVanNoiBo(searchQuery)
+        }
+    }, [
+        searchQuery,
+        handleSearchNhanVien,
+        handleSearchPhongBan,
+        handleSearchCongVan,
+        handleSearchLinhVuc,
+        handleSearchCongVanDen,
+        handleSearchCongVanDi,
+        handleSearchCongVanNoiBo
+    ])
 
     return (
         <Box>

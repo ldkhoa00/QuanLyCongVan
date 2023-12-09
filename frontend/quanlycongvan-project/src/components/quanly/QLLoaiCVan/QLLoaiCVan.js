@@ -1,18 +1,15 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import QLThemPhongBan from './QLThemPhongBan';
-import QLXoaPhongBan from './QLXoaPhongBan'
-import QLCapNhatPhongBan from './QLCapNhatPhongBan'
+import QLThemLoaiCVan from './QLThemLoaiCVan';
+import QLXoaLoaiCVan from './QLXoaLoaiCVan'
+import QLCapNhatLoaiCVan from './QLCapNhatLoaiCVan'
 import SearchBar from '../../global/SearchBar';
 import '../quanly.css'
-import { useGetPhongBan } from '../../../api/PhongBan/usePhongBan';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useGetLoaiCVan } from '../../../api/LoaiCVan/useLoaiCVan';
 import { isUserAllow } from '../../../utils/utils';
 
-
-const QLPhongBan = () => {
+const QLLoaiCVan = () => {
     const pageStyle = {
         display: 'flex',
         flexDirection: 'column',
@@ -20,33 +17,9 @@ const QLPhongBan = () => {
         margin: "auto",
         width: "100%"
     }
+
     //Lấy data
-    const { data: phongbanData, isLoading, error } = useGetPhongBan();
-
-    //******* Chức năng search *******
-    //PhongBan được search
-    const [filteredPhongBan, setFilteredPhongBan] = useState("");
-
-
-    //useEffect
-    useEffect(() => {
-        if (phongbanData) {
-            setFilteredPhongBan(phongbanData)
-        }
-    }, [phongbanData])
-
-    //Search method
-    const handleSearchPhongBan = (query) => {
-        if (phongbanData) {
-            var searchResult = phongbanData.filter((phongban) => phongban.tenphongban.toLowerCase().indexOf(query.toLowerCase()) !== -1); //đưa tất cả về lowercase
-            setFilteredPhongBan(searchResult);
-        }
-
-    }
-
-    //*************************************/
-
-
+    const { data: loaicvanData, isLoading, error } = useGetLoaiCVan();
 
     if (isLoading) {
         return "Cò lỗi gì đó đã xảy ra"
@@ -56,13 +29,15 @@ const QLPhongBan = () => {
         return <div>{error.message}</div>;
     }
 
+
+
     //Hiển thị option cho list
     const renderButton = (params) => {
         return (
             <div style={{ display: "flex" }}>
-                <QLCapNhatPhongBan phongbanID={params.row.id} phongbanData={phongbanData} />
+                <QLCapNhatLoaiCVan loaicvanID={params.row.id} loaicvanData={loaicvanData} />
                 <div className='space-width' />
-                <QLXoaPhongBan phongbanID={params.row.id} />
+                <QLXoaLoaiCVan loaicvanID={params.row.id} />
             </div>
         )
     }
@@ -70,30 +45,28 @@ const QLPhongBan = () => {
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 220 },
-        { field: 'tenphongban', headerName: 'Tên phòng ban', flex: 1 },
-        { field: 'truongphong', headerName: 'Trưởng phòng', flex: 1 },
-        { field: 'sdtphongban', headerName: 'Số ĐT Phòng', flex: 1 },
+        { field: 'tenloaicvan', headerName: 'Tên loại công văn', flex: 1 },
+        { field: 'kyhieu', headerName: 'Ký hiệu', flex: 1 },
         isUserAllow() ? "" : { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
     ];
 
     //Rows
-    const rows = filteredPhongBan ? [...filteredPhongBan].reverse().map((item) => {
+    const rows = loaicvanData ? [...loaicvanData].reverse().map((item) => {
         return {
             id: item._id,
-            tenphongban: item.tenphongban,
-            truongphong: item.truongphong,
-            sdtphongban: item.sdtphongban
+            tenloaicvan: item.tenloaicvan,
+            kyhieu: item.kyhieu,
         };
     }) : [];
     return (
         <Box style={pageStyle}>
             <div className='app-bar'>
                 <div className="search-bar">
-                    <SearchBar handleSearchPhongBan={handleSearchPhongBan} />
+                    <SearchBar />
                 </div>
                 <div className='space-width' />
                 <div className="add-button">
-                    <QLThemPhongBan isUserAllow={isUserAllow} />
+                    <QLThemLoaiCVan isUserAllow={isUserAllow} />
                 </div>
             </div>
 
@@ -115,4 +88,4 @@ const QLPhongBan = () => {
     );
 };
 
-export default QLPhongBan;
+export default QLLoaiCVan;

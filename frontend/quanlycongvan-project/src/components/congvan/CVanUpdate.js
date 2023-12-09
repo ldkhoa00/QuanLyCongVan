@@ -219,7 +219,7 @@ const CVanUpdate = ({ kieucvanden, kieucvandi, kieucvannoibo, congvandenID, cong
 
     return (
         <Box>
-            <IconButton onClick={handleOpen} >
+            <IconButton  onClick={handleOpen} >
                 <FaPen fontSize="medium" />
             </IconButton>
             <Dialog

@@ -8,7 +8,7 @@ import { useAddNhanVien } from '../../../api/NhanVien/useNhanVien';
 
 
 const QLThemNhanVien = (props) => {
-
+    const isUserAllow = props.isUserAllow
     //State
     const [openInner, setOpenInner] = useState(false);
     const [open, setOpen] = useState(false);
@@ -88,7 +88,7 @@ const QLThemNhanVien = (props) => {
 
     return (
         <Box>
-            <Button variant="outlined" onClick={handleOpen} size='large'>
+            <Button style={{ display: isUserAllow() ? 'none' : 'inline-block' }} variant="outlined" onClick={handleOpen} size='large'>
                 Thêm
             </Button>
             <Dialog
@@ -102,7 +102,7 @@ const QLThemNhanVien = (props) => {
                     <Box
                         component="form"
                         sx={{
-                            '& .MuiTextField-root': { m: 1, width: '30ch' },
+                            '& .MuiTextField-root': { m: 1, width: '28ch' },
                         }}
                         noValidate
                         autoComplete="off">
