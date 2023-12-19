@@ -6,6 +6,7 @@ import { useUpdateCongVan, useGetCongVanById } from '../../api/CongVan/useCongVa
 import { useGetPhongBan } from '../../api/PhongBan/usePhongBan';
 import { Document, Page, pdfjs } from 'react-pdf';
 import "./congvan.css"
+import { isUserAllow } from '../../utils/utils';
 const CVanDetail = () => {
 
     //Style
@@ -121,7 +122,7 @@ const CVanDetail = () => {
             const isPhongbanExist = phongban.includes(pb._id);
             return (
                 <div key={pb._id} className="container">
-                    <Checkbox value={pb._id} onChange={onCheckBoxChanged} checked={isPhongbanExist} />
+                    <Checkbox value={pb._id} onChange={onCheckBoxChanged} disabled={isUserAllow() ? true : false} checked={isPhongbanExist} />
                     {pb.tenphongban}
                 </div>
             );

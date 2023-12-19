@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import { useGetLinhVuc } from '../../api/LinhVuc/useLinhVuc';
 import { useGetLoaiCVan } from '../../api/LoaiCVan/useLoaiCVan';
 import { isUserAllow } from '../../utils/utils'
+import { useGetUserById } from '../../api/User/useUser';
 
 const pageStyle = {
     display: 'flex',
@@ -28,10 +29,16 @@ const CVanMain = () => {
 
     const [value, setValue] = useState('1')
 
+    //Lấy userID
+    const userID = localStorage.getItem("userID")
+
     //Lấy data
     const { data: congvanData, isLoading, error } = useGetCongVan();
     const { data: linhvucData } = useGetLinhVuc();
     const { data: loaicvanData } = useGetLoaiCVan();
+    const { data: userData } = useGetUserById(userID);
+
+
 
     //Các state
     const [congvandenData, setCongVanDenData] = useState(null)
@@ -55,6 +62,16 @@ const CVanMain = () => {
         }
     }, [congvanData])
 
+    // Hàm lọc để lấy danh sách công văn
+    let danhSachCongVan = null;
+    if (congvanData && userData) {
+        const userPhongBanID = userData.phongban._id;
+        // Lọc các công văn theo điều kiện phongbanID trùng nhau
+        danhSachCongVan = congvanData.filter(congvan => {
+            return congvan.phongban.some(pb => pb._id === userPhongBanID);
+        });
+
+    }
 
     //MenuItem cho LinhVuc Select
     let linhvucSelect = null;
@@ -222,13 +239,13 @@ const CVanMain = () => {
                                 </TabList>
                             </Box>
                             <TabPanel value='1'>
-                                <CVanDen isUserAllow={isUserAllow} congvandenData={congvandenData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
+                                <CVanDen danhSachCongVan={danhSachCongVan} isUserAllow={isUserAllow} congvandenData={congvandenData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
                             </TabPanel>
                             <TabPanel value='2'>
-                                <CVanDi isUserAllow={isUserAllow} congvandiData={congvandiData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
+                                <CVanDi danhSachCongVan={danhSachCongVan} isUserAllow={isUserAllow} congvandiData={congvandiData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
                             </TabPanel>
                             <TabPanel value='3'>
-                                <CVanNoiBo isUserAllow={isUserAllow} congvannoiboData={congvannoiboData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
+                                <CVanNoiBo danhSachCongVan={danhSachCongVan} isUserAllow={isUserAllow} congvannoiboData={congvannoiboData} CVanXoa={CVanXoa} CVanThem={CVanThem} CVanUpdate={CVanUpdate} />
                             </TabPanel>
                         </TabContext>
                     </Box>

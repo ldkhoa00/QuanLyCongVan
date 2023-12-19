@@ -44,7 +44,6 @@ const QLLoaiCVan = () => {
 
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 220 },
         { field: 'tenloaicvan', headerName: 'Tên loại công văn', flex: 1 },
         { field: 'kyhieu', headerName: 'Ký hiệu', flex: 1 },
         isUserAllow() ? "" : { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }

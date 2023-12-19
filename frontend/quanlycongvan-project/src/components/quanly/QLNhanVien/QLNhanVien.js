@@ -54,7 +54,6 @@ const QLNhanVien = () => {
     //Gán dữ liệu cho datagrid
     //Collumn
     const columns = [
-        { field: 'id', headerName: 'ID', width: 220 },
         {
             field: 'tennhanvien',
             headerName: 'Tên đầy đủ',

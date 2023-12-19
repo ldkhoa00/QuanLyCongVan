@@ -69,7 +69,6 @@ const QLPhongBan = () => {
 
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 220 },
         { field: 'tenphongban', headerName: 'Tên phòng ban', flex: 1 },
         { field: 'truongphong', headerName: 'Trưởng phòng', flex: 1 },
         { field: 'sdtphongban', headerName: 'Số ĐT Phòng', flex: 1 },

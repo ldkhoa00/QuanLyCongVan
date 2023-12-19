@@ -6,16 +6,23 @@ import CVanUpdate from '../CVanUpdate';
 import { useState } from 'react';
 import SearchBar from '../../global/SearchBar';
 
-const CVanDi = ({ congvandiData, isUserAllow }) => {
+const CVanDi = ({ congvandiData, isUserAllow, danhSachCongVan }) => {
 
     //Hiển thị option cho list
     const renderButton = (params) => {
+
+        let isIdInList = null
+        if (danhSachCongVan) {
+            isIdInList = danhSachCongVan.some((item) => item._id === params.row.id);
+        }
         return (
-            <div style={{ display: "flex" }}>
-                <CVanUpdate isUserAllow={isUserAllow} kieucvandi={"Công văn đến"} congvandiID={params.row.id} />
-                <div className='space-width' />
-                <CVanXoa isUserAllow={isUserAllow} congvandiID={params.row.id} />
-            </div >
+            <div style={{ display: isIdInList ? 'none' : '' }}>
+                <div style={{ display: "flex" }}>
+                    <CVanUpdate isUserAllow={isUserAllow} kieucvandi={"Công văn đến"} congvandiID={params.row.id} />
+                    <div className='space-width' />
+                    <CVanXoa isUserAllow={isUserAllow} congvandiID={params.row.id} />
+                </div >
+            </div>
         )
     }
 
@@ -54,7 +61,7 @@ const CVanDi = ({ congvandiData, isUserAllow }) => {
             }
         },
         { field: 'trangthai', headerName: 'Trạng thái', flex: 1 },
-        isUserAllow() ? "" : { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
+        { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
     ];
 
     //Rows
@@ -62,7 +69,7 @@ const CVanDi = ({ congvandiData, isUserAllow }) => {
         return {
             id: item._id,
             kyhieucvan: item.kyhieucvan,
-            chudecvan:item.chudecvan,
+            chudecvan: item.chudecvan,
             ngaygui: item.ngaygui,
             loaicvan: item.loaicvan.tenloaicvan,
             linhvuc: item.linhvuc ? item.linhvuc.tenlinhvuc : "N/A",

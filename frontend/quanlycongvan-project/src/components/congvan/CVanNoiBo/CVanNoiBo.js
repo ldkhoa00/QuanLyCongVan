@@ -6,17 +6,23 @@ import CVanUpdate from '../CVanUpdate';
 import SearchBar from '../../global/SearchBar';
 import { useState } from 'react';
 
-const CVanNoiBo = ({ congvannoiboData, isUserAllow }) => {
+const CVanNoiBo = ({ congvannoiboData, isUserAllow, danhSachCongVan }) => {
 
 
     //Hiển thị option cho list
     const renderButton = (params) => {
+        let isIdInList = null
+        if (danhSachCongVan) {
+            isIdInList = danhSachCongVan.some((item) => item._id === params.row.id);
+        }
         return (
-            <div style={{ display: "flex" }}>
-                <CVanUpdate isUserAllow={isUserAllow} kieucvanden={"Công văn đến"} congvandenID={params.row.id} />
-                <div className='space-width' />
-                <CVanXoa isUserAllow={isUserAllow} congvandenID={params.row.id} />
-            </div >
+            <div style={{ display: isIdInList ? 'none' : '' }}>
+                <div style={{ display: "flex" }}>
+                    <CVanUpdate isUserAllow={isUserAllow} kieucvanden={"Công văn đến"} congvandenID={params.row.id} />
+                    <div className='space-width' />
+                    <CVanXoa isUserAllow={isUserAllow} congvandenID={params.row.id} />
+                </div >
+            </div>
         )
     }
 
@@ -56,7 +62,7 @@ const CVanNoiBo = ({ congvannoiboData, isUserAllow }) => {
             }
         },
         { field: 'trangthai', headerName: 'Trạng thái', flex: 1 },
-        isUserAllow() ? "" : { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
+        { field: 'option', headerName: 'Chức năng', flex: 1, renderCell: renderButton, sortable: false }
     ];
 
     //Rows
