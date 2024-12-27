@@ -12,3 +12,4 @@ khi thêm mới công văn, phòng ban có thể
 4. thêm field kieucvan để xác định công văn đến, đi, nội bộ.
 5. không cần hiển thị ngày gửi và ngày ban hành do trong công văn đã có thông tin
 chỉ cần ngày gửi
+==End==
